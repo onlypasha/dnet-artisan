@@ -1,0 +1,41 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  powershell:
+    name: PowerShell 7 / ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows-latest, ubuntu-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: 10.0.x
+      - name: Test generators and compile generated C#
+        shell: pwsh
+        run: ./tests/Test-Dnet.ps1
+      - name: Test install and uninstall with temporary profiles
+        shell: pwsh
+        run: ./tests/Test-Install.ps1
+
+  windows-powershell:
+    name: Windows PowerShell 5.1
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v6
+      - name: Test compatibility and command dispatch
+        shell: powershell
+        run: ./tests/Test-Dnet.ps1 -SkipBuild
+      - name: Test installer compatibility
+        shell: powershell
+        run: ./tests/Test-Install.ps1
