@@ -1,10 +1,10 @@
 # dnet-artisan
 
-**Artisan-style commands for .NET, right in your PowerShell terminal.**
+**Artisan-style commands for .NET, in PowerShell or your Linux terminal.**
 
 Create controllers, classes, DTOs, and service/interface pairs without leaving
 your editor. Run, build, test, and manage EF Core migrations using short commands.
-Works with Zed, VS Code, or any terminal that runs PowerShell.
+Works with Zed, VS Code, and Linux Bash/Zsh terminals.
 
 ```powershell
 dnet make:controller Product --resource
@@ -18,7 +18,7 @@ dnet serve
 
 ## Status and requirements
 
-Version **0.1.0** is a PowerShell helper, not a .NET global tool or an editor
+Version **0.2.0** uses a PowerShell engine, not a .NET global tool or an editor
 extension. Windows PowerShell 5.1 and PowerShell 7 are supported. PowerShell 7
 is required on Linux and macOS. Install a .NET SDK appropriate to your project.
 The generated code targets current SDK-style C# projects; the compilation smoke
@@ -26,6 +26,32 @@ test uses .NET 10. EF commands also require `dotnet-ef` and the
 `Microsoft.EntityFrameworkCore.Design` package in the target project.
 
 ## Install from this checkout
+
+### Linux (Bash/Zsh)
+
+Install [PowerShell 7 (`pwsh`)](https://learn.microsoft.com/powershell/scripting/install/installing-powershell-on-linux)
+and a .NET SDK first. Then, from your clone:
+
+```sh
+sh install.sh
+export PATH="$HOME/.local/bin:$PATH"
+dnet --version
+dnet list
+```
+
+The `dnet` command works directly in Bash/Zsh. Its engine still requires `pwsh`
+on PATH; you do not have to switch to a PowerShell shell. The installer creates
+`~/.local/bin/dnet` and stores the engine in
+`${XDG_DATA_HOME:-$HOME/.local/share}/dnet-artisan/cli`. Add `~/.local/bin` to your
+shell's startup PATH if it is not already included. No shell profile is edited.
+
+```sh
+# Optional custom prefix; use the same prefix for uninstall.
+sh install.sh --prefix "$HOME/tools"
+export PATH="$HOME/tools/bin:$PATH"
+```
+
+### Windows / PowerShell sessions
 
 Clone or download this repository, open PowerShell in its directory, then run:
 
@@ -66,8 +92,9 @@ For a one-session trial without installation:
 dnet list
 ```
 
-The command is available in PowerShell sessions. This release does not install a
-`cmd.exe`, Bash, or Zsh command, and it is not installed through `dotnet tool`.
+The PowerShell installer exposes a function in PowerShell sessions. Use
+`install.sh` for a Bash/Zsh command on Linux. `cmd.exe` and `dotnet tool`
+installation are not provided.
 
 ## Common commands
 
@@ -130,6 +157,18 @@ during installation or tests, and does not install EF tools automatically.
 
 ## Uninstall
 
+Linux shell installation:
+
+```sh
+sh uninstall.sh
+# If you chose a custom prefix:
+sh uninstall.sh --prefix "$HOME/tools"
+```
+
+This removes only managed engine files and the launcher, retains unrelated files,
+and refuses to remove modified installed files. A PowerShell profile installation
+is separate and uses the PowerShell uninstaller below.
+
 From this checkout:
 
 ```powershell
@@ -150,6 +189,9 @@ Generated C# files are not removed.
 ./tests/Test-Dnet.ps1
 ./tests/Test-Install.ps1
 ```
+
+On Linux, also run `bash tests/Test-Unix.sh` and `sh tests/Test-Unix.sh` to test
+the installed shell command end to end.
 
 The first suite compiles generated C# and exercises project selection, path
 handling, collisions, CLI forwarding, and command completion. The installer

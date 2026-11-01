@@ -5,6 +5,27 @@ Bisa digunakan di Zed, VS Code, maupun terminal PowerShell lainnya.
 
 ## Instalasi
 
+### Linux: Bash/Zsh
+
+Pasang PowerShell 7 (`pwsh`) dan .NET SDK terlebih dahulu. Dari folder repository:
+
+```sh
+sh install.sh
+export PATH="$HOME/.local/bin:$PATH"
+dnet --version
+dnet make:controller Product --resource
+```
+
+Perintah `dnet` bisa langsung dipakai di Bash/Zsh tanpa masuk ke shell PowerShell.
+Mesinnya tetap membutuhkan `pwsh`. Installer tidak memakai `sudo` atau mengubah
+profil shell. Lokasi launcher: `~/.local/bin/dnet`; lokasi mesin mengikuti
+`XDG_DATA_HOME`, atau `~/.local/share/dnet-artisan/cli` secara default.
+
+Untuk prefix sendiri, gunakan `sh install.sh --prefix "$HOME/tools"` lalu
+tambahkan `$HOME/tools/bin` ke PATH. Lihat [panduan utama](../README.md).
+
+### Windows / PowerShell
+
 Jalankan dari folder repository:
 
 ```powershell
@@ -62,6 +83,16 @@ Rollback selalu memerlukan migration tujuan; `0` berarti sebelum migration
 pertama. Instalasi dan tes helper tidak menjalankan migration pada database.
 
 ## Menghapus instalasi
+
+Instalasi shell Linux:
+
+```sh
+sh uninstall.sh
+# Jika memakai prefix sendiri:
+sh uninstall.sh --prefix "$HOME/tools"
+```
+
+Instalasi profil PowerShell:
 
 ```powershell
 ./uninstall.ps1

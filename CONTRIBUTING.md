@@ -9,6 +9,10 @@ and other syntax introduced in PowerShell 7.
 ./tests/Test-Install.ps1
 ```
 
+Linux CLI changes must also pass `bash tests/Test-Unix.sh` and
+`sh tests/Test-Unix.sh`. These tests use an isolated prefix and HOME/XDG paths;
+never point them at a real user installation.
+
 Use `-SkipBuild` for fast generator/dispatch checks or `-KeepArtifacts` to inspect
 temporary fixtures after a run. Full validation must include the compilation
 smoke test. Tests must not use a real application's database or edit actual

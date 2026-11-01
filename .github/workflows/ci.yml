@@ -39,3 +39,24 @@ jobs:
       - name: Test installer compatibility
         shell: powershell
         run: ./tests/Test-Install.ps1
+
+  linux-shell:
+    name: Linux Bash and POSIX shell CLI
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: 10.0.x
+      - name: Check POSIX shell syntax
+        shell: bash
+        run: |
+          sh -n install.sh
+          sh -n uninstall.sh
+          sh -n tests/Test-Unix.sh
+      - name: Test CLI from Bash
+        shell: bash
+        run: bash tests/Test-Unix.sh
+      - name: Test CLI from POSIX sh
+        shell: bash
+        run: sh tests/Test-Unix.sh

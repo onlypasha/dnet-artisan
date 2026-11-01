@@ -15,7 +15,8 @@ try {
     Assert (Test-Path -LiteralPath (Join-Path $destination 'Dnet.ps1')) 'Source was not installed.'
     Assert ([IO.File]::ReadAllText($existingProfile).StartsWith($original)) 'Existing profile text changed.'
     . $existingProfile
-    Assert ((dnet version) -eq 'dnet-artisan 0.1.0') 'Profile loader did not load the helper.'
+    $expectedVersion=([IO.File]::ReadAllText((Join-Path $repository 'VERSION'))).Trim()
+    Assert ((dnet version) -eq "dnet-artisan $expectedVersion") 'Profile loader did not load the helper.'
     Assert ((ExistingFunction) -eq 'preserved') 'Existing function was lost.'
     & (Join-Path $repository 'install.ps1') -InstallDirectory $destination -ProfilePath @($existingProfile,$newProfile)
     Assert (([regex]::Matches([IO.File]::ReadAllText($existingProfile),'# BEGIN DNET-ARTISAN')).Count -eq 1) 'Reinstall duplicated its loader.'

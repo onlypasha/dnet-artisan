@@ -1,6 +1,6 @@
 #requires -Version 5.1
 # dnet-artisan: Artisan-style helpers for the .NET CLI.
-$script:DnetVersion = '0.1.0'
+$script:DnetVersion = '0.2.0'
 function Get-DnetProjects {
     param([string]$Directory)
     $pending = New-Object 'System.Collections.Generic.Stack[string]'
